@@ -57,7 +57,7 @@ inquirer.prompt([
               console.log(res[i].product_name + " has a low inventory of " + res[i].stock_quantity + " units" )
             } else {
               // console.log(res[i].product_name + " is stocked sufficently")
-              
+
             };
      
              };
@@ -65,7 +65,43 @@ inquirer.prompt([
    });
         break;
     case "Add to inventory":
-        console.log("working3");
+    connection.query("SELECT * FROM products", function(err, res) {
+   console.log("Welcome to BAMAZON, See our products below")
+  for (var i = 0; i < res.length; i++) {
+    console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + "$" + res[i].price + " | " + res[i].stock_quantity);
+  }
+  console.log("-----------------------------------");
+});
+
+
+    inquirer.prompt([
+  {
+    name: "id",
+    message: "What is the id of the product you would like to update?"
+  }, {
+    name: "quantity",
+    message: "How many of this item would you like to add to inventory?"
+  }
+]).then(function(answer) {
+
+   
+      connection.query("SELECT * FROM products", function(err, res) {
+    var updateQuantity = (res[(answer.id - 1)].stock_quantity) + answer.quantity
+    console.log(updateQuantity);
+
+     connection.query("UPDATE products SET ? WHERE ?", [{
+  stock_quantity: updateQuantity
+}, {
+  item_id: answer.id
+}], function(err, res) {});
+
+console.log(res[(answer.id - 1)].product_name + " inventory has been updated by " + answer.quantity + " units");
+     
+});
+});  
+
+
+      
         break;
     case "Add a new product":
         console.log("working4");
