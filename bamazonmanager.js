@@ -86,7 +86,7 @@ inquirer.prompt([
 
    
       connection.query("SELECT * FROM products", function(err, res) {
-    var updateQuantity = (res[(answer.id - 1)].stock_quantity) + answer.quantity
+    var updateQuantity = res[(answer.id - 1)].stock_quantity += Number(answer.quantity)
     console.log(updateQuantity);
 
      connection.query("UPDATE products SET ? WHERE ?", [{
